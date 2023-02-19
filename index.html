@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src='js/main.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <title>Verpackungsverschwendung und -recycling in der EU</title>
+</head>
+<body>
+
+<v-container class="container main" id="app" style="padding: 0; max-width: 1185px">
+
+    <v-app id="inspire" style="background-color: aliceblue">
+        <v-container fluid class="pa-0">
+            <v-card>
+                <v-toolbar
+                        color="blue"
+                        dark
+                        flat>
+                    <v-toolbar-title>Verpackungsverschwendung und -recycling in der EU</v-toolbar-title>
+
+                    <template v-slot:extension>
+                        <v-tabs
+                                v-model="activeTabIdentifier"
+                        >
+                            <v-tabs-slider color="white"></v-tabs-slider>
+                            <v-tab :key="problemTab" :href="'#' + problemTab">
+                                Problem
+                            </v-tab>
+                            <v-tab :key="dataTab" :href="'#' + dataTab">
+                                Daten
+                            </v-tab>
+                            <v-tab :key="conceptualFoundationsTab" :href="'#' + conceptualFoundationsTab">
+                                Konzeptionelle Grundlagen
+                            </v-tab>
+                            <v-tab :key="visualizationTab" :href="'#' + visualizationTab">
+                                Visualisierung
+                            </v-tab>
+                            <v-tab :key="referencesTab" :href="'#' + referencesTab">
+                                Referenzen
+                            </v-tab>
+                            <v-tab :key="aboutUsTab" :href="'#' + aboutUsTab">
+                                Über uns
+                            </v-tab>
+                        </v-tabs>
+                    </template>
+                </v-toolbar>
+
+                <v-tabs-items v-model="activeTabIdentifier">
+                    <v-tab-item :key="problemTab" :id="problemTab">
+                        <v-card flat class="pa-5">
+                            <h2>Projekt</h2>
+                            <p>
+                                Im Rahmen des Moduls Datenvisualisierung (DAVI) an der Hochschule Luzern haben wir die
+                                Aufgabe erhalten, Daten in einer selbst programmierten Website zu visualisieren. Dieser
+                                Prozess beinhaltet die Auswahl, Bereinigung und Analyse der Daten, Entscheidung über die geeignete Art der Darstellung sowie die Programmierung der interaktiven Visualisierung
+                            </p>
+
+                            <h2>Problemstellung</h2>
+                            <p>
+                                Obwohl der Umweltschutz immer wichtiger wird, gibt es noch viele Herausforderungen beim
+                                vernünftigen Umgang mit Verpackungsmaterialien in der EU.
+                                Insbesondere das Recovery(Recycling und die Energierückgewinnung) von Verpackungsabfällen sind
+                                wichtige Aspekte, die untersucht werden sollten. Unsere Visualisierung soll die
+                                verbrauchten Verpackungsmaterialien und deren Recovery in der EU über den Lauf der Zeit
+                                darstellen und vergleichen. Wir möchten damit herausfinden, welches Land im
+                                internationalen Vergleich mehr für die Nachhaltigkeit tut, im Bereich Verpackung. Insbesondere sollen folgende
+                                Fragen beantwortet werden:
+                            </p>
+                            <ul>
+                                <li>Welches Land verbraucht mehr Verpackungsmaterial als es wiedergewinnt?</li>
+                                <li>In welchem Land wird am wenigsten und am meisten Verpackungsabfall erzeugt?</li>
+                                <li>In welchem Land wird am wenigsten und am meisten Verpackungsabfall wieder gewonnen?</li>
+                            </ul>
+
+                            <h2>Konzept</h2>
+                            <p>
+                                Bei der Entwicklung unseres Konzepts haben wir uns zuerst Gedanken darüber gemacht,
+                                welchen Fokus wir verfolgen und welches Wissen wir unseren Nutzern vermitteln möchten.
+                                Wir haben erkannt, dass es von großer Bedeutung ist, die Daten auf eine klare und
+                                verständliche Weise darzustellen, um eine schnelle und effiziente Vergleichbarkeit der
+                                Länder zu ermöglichen.
+                                Aus diesem Grund haben wir uns für eine Karte entschieden, die interaktiv genutzt werden
+                                kann, um einen Überblick über die Daten zu erhalten und tiefer in das Thema
+                                einzutauchen. Zusätzlich haben wir uns für eine einzelne Grafik entschieden, die
+                                minimalistisch die Länder vergleicht und eine schnelle Vergleichbarkeit ermöglicht.
+                                Durch die Verwendung dieser beiden Elemente in unserem Konzept, ermöglichen wir es den
+                                Nutzern, die Daten auf verschiedene Weise zu betrachten und zu interpretieren. Die
+                                Karte ermöglicht es, geografische Zusammenhänge zu erkennen und die Verteilung der Daten
+                                auf einen Blick zu sehen, während die einzelne Grafik es ermöglicht, die Länder direkt
+                                miteinander zu vergleichen.
+                                Diese Kombination aus einer interaktiven Karte und einer minimalistischen Grafik
+                                ermöglicht es uns, die Daten in einer anschaulichen und leicht verständlichen Weise
+                                darzustellen, während wir gleichzeitig auf die wichtigsten Aspekte fokussieren. Unser
+                                Konzept ermöglicht es den Nutzern, schnell und einfach wichtige Einsichten zu gewinnen
+                                und ihnen einen tieferen Einblick in die Daten zu ermöglichen.
+
+                            </p>
+                            <h2>Sketch</h2>
+                            <v-img src="img/Skizze_DAVI.png" alt="Unsere Skizze für die Visualiserung"
+                                   max-width="1000"></v-img>
+                            <h2>Erkenntnisse</h2>
+                            <p>
+                                Das einzige Land, welches eine negative Differenz über die gesamte Zeitspanne hat, ist
+                                Finnland. Seit 2015 haben sie mehr Verpackungen wiedergewonnen als produziert. Im Gegenteil
+                                hat Portugal die grösste Differenz bei der Masseinheit kilogram pro Kopf. Wenn man
+                                jedoch die Masseinheit auf Tonnen stellt, schneidet Frankreich am schlechtesten ab. Dazu
+                                kommt, dass weder Portugal noch Frankreich besonders viel Wiedergewinnen.
+                            </p>
+                            <p>
+                                Am meisten Verpackungsabfall erzeugt Deutschland. Sie sind aber auch diejenigen, die die höchste Recovery ausweisen. Weshalb ihre Differenz eine der Besten ist.
+                            </p>
+                            <p>
+                                Am wenigsten wird in Kroatien wiedergewonnen, sie produzieren dafür aber nicht sehr viel Abfall
+                                und gehören im europäischen Vergleich zu den besseren Ländern.
+                            </p>
+                            <p>
+                                Zusammengefasst lässt sich sagen, dass die Wiedergewinnung der Abfälle über die Jahre gestiegen ist. Jedoch wird auch mehr Abfall produziert, was darin resultiert, dass fast alle Länder einen Anstieg in der
+                                Abfallproduktion haben. Zukünftig muss deshalb unbedingt mehr Abfall zurückgewonnen werden.
+                            </p>
+                        </v-card>
+                    </v-tab-item>
+
+                    <v-tab-item :key="dataTab" :id="dataTab">
+                        <v-card flat class="pa-5">
+                            <h2>Daten</h2>
+                            <p>
+                                Die Daten werden von Eurostat zur Verfügung gestellt (Quelle: <a
+                                    href="https://ec.europa.eu/eurostat/databrowser/view/env_waspac/default/table?lang=en">https://ec.europa.eu/eurostat/databrowser/view/env_waspac/default/table?lang=en</a>).
+                                Eurostat (Statistische Amt der Europäischen Union) ist die Verwaltungseinheit der
+                                Europäischen Union (EU) zur Erstellung amtlicher europäischer Statistiken.
+                            </p>
+                            <p>
+                                Die Datenbank enthält Daten von 1997 bis 2020, wobei die vollständigsten Daten erst ab
+                                2012 drin sind. Aufgrund dessen verwenden wir für unsere Visualisierung Daten ab 2012.
+                                Die Datensätze liefern Daten über Verpackungen und Verpackungsabfälle und werden von der
+                                EU für das Beobachten der Einhaltung der quantitativen Verwertungs- und Recyclingziele
+                                verwendet.
+                            </p>
+                            <p>
+                                Unter "Verpackungen" sind in diesem Zusammenhang alle Produkte aus Materialien jeglicher
+                                Art zu verstehen, die für die Umschliessung, den Schutz, die Handhabung, die Lieferung
+                                und die Aufmachung von Waren, von Rohstoffen bis zu verarbeiteten Waren, vom Hersteller
+                                bis zum Benutzer oder Verbraucher verwendet werden. Einwegartikel", die für dieselben
+                                Zwecke verwendet werden, gelten ebenfalls als Verpackungen.
+                            </p>
+                            <p>
+                                "Verpackungsabfälle" sind alle Verpackungen oder Verpackungsmaterialien, die unter die
+                                Definition von Abfall in der <a
+                                    href="https://de.wikipedia.org/wiki/Richtlinie_2008/98/EG">Abfallrahmenrichtlinie
+                                2008/98/EG</a> fallen, mit Ausnahme von Produktionsrückständen.
+                            </p>
+                            <p>
+                                Für unser Projekt waren folgende Datenattribute wichtig:
+                            </p>
+                            <ul>
+                                <li><b>Jahr</b><br/>Umfasst ein Jahr.</li>
+                                <li><b>Geopolitische Einheit</b><br/>EU-Mitgliedstaaten, EWR-/EFTA-Länder ausser die
+                                    Schweiz.
+                                </li>
+                                <li><b>Verpackungskategorie</b><br/>Beschreibt die Kategorie der Verpackung. Für unser
+                                    Projekt haben wir alle Verpackungskategorien zusammengefasst. Dies umfasst
+                                    Verpackungen aus Papier und Pappe, Kunststoff, Holz, Metall, Glas und Sonstiges.
+                                </li>
+                                <li><b>Verpackungswirtschaft</b><br/>Beschreibt ob es sich um "Verpackungserzeugung"
+                                    oder "Verpackungsverwertung" handelt.
+                                </li>
+                                <li><b>Masseinheit</b><br/>Beschreibt die verwendete Masseinheit der numerischen Werte.
+                                    In unserem Fall "Kilogram pro Kopf" und "Tonnen"
+                                </li>
+                                <li><b>Wert</b><br/>Der numerische Wert für ein Jahr eines Landes.</li>
+                            </ul>
+                            <p>
+                                Die Daten sind insgesamt von guter Qualität und werden aus zuverlässigen Quellen
+                                erhoben.
+                            </p>
+                        </v-card>
+                    </v-tab-item>
+
+                    <v-tab-item :key="conceptualFoundationsTab" :id="conceptualFoundationsTab">
+                        <v-card flat class="pa-5">
+                            <h2>Konzeptionelle Grundlage</h2>
+
+                            <h3>Grundlagen Visuelles Design</h3>
+                            <p>Die Entscheidung die Daten zu visualisieren fiel auf die Verwendung einer EU-Karte als
+                                Zentralelement, um Daten intuitiv darzustellen. Durch das Bewegen der Maus über ein
+                                bestimmtes Land auf der Karte können erste Informationen gewonnen werden, wobei der
+                                Nutzer verschiedene Filter wie Zeitspannen und Einheiten anwenden kann. Die Werte werden
+                                durch eine Farbabstufung auf der Karte dargestellt und können durch die Verwendung von
+                                Radio-Buttons zwischen Recovery, erzeugten Verpackungen oder der Differenz der beiden
+                                Werte geändert werden. Es gibt zusätzlich ein Info-Icon für eine kurze Erklärung von
+                                Difference, Waste generated und Recovery. Um die Länder besser vergleichen zu können,
+                                kann ein Land ausgewählt und auf der rechten Seite detailliert mit anderen Ländern in einer spezifischen Zeitspanne verglichen werden.
+                            </p>
+
+                            <h3>Grundprinzipien des analytischen Designs (Tufte)</h3>
+                            <p>Die Darstellung der Visualisierung stützt sich auf die 6 Prinzipien von Tufte:
+                            </p>
+                            <ul>
+                                <li><b>Prinzip 1: Comparisons</b><br/>Durch die Farbabstufung auf der Karte und
+                                    zusätzlich durch ein Liniendiagramm können Länder ausgewählt und miteinander
+                                    verglichen werden.
+                                </li>
+                                <li><b>Prinzip 2: Causality, Mechanism, Structure, Explanation</b><br/>Durch die
+                                    Einstellmöglichkeiten und die Visualisierung, die immer Verpackung und Zeit
+                                    beinhalten, kann die Kausalität und Struktur der Daten erklärt werden. Der
+                                    Mechanismus wird ersichtlich bei Änderungen am Filter.
+                                </li>
+                                <li><b>Prinzip 3: Multivariate Analysis</b><br/>Das Linien-Diagramm vereint die
+                                    Dimensionen Zeit, Verpackung und Land.
+                                </li>
+                                <li><b>Prinzip 4: Integration of Evidence</b><br/>Zusätzliche Informationen werden angezeigt, wenn über ein Land
+                                    geschwebt wird und unterstützen die Visualisierung durch exakte Werte.
+                                </li>
+                                <li><b>Prinzip 5: Documentation</b><br/>Die Nachvollziehbarkeit durch die Angabe der
+                                    Problemstellung, Entscheidungen und Datenquellen ermöglicht es, die Visualisierung
+                                    gut nachzubilden.
+                                </li>
+                                <li><b>Prinzip 6: Content Counts Most of All</b><br/>Um die Ablenkung der nutzende Person zu
+                                    minimieren und den Fokus der Visualisierung nicht zu stören, wurde entschieden, für
+                                    eine simple Darstellung zu optieren, bei der die Daten für sich sprechen.
+                                </li>
+                            </ul>
+
+                            <h3>Data-Ink Ratio (Tufte) </h3>
+                            <p>Wir haben uns bei der Gestaltung unserer Visualisierungen entschieden, den Data Ink Ratio
+                                (DIR) als wichtigen Faktor zu berücksichtigen. Wir glauben, dass es von großer Bedeutung
+                                ist, dass die dargestellten Daten klar und deutlich hervorgehoben werden, um eine
+                                einfache Interpretation und Vergleichbarkeit zu ermöglichen.
+                                Um dies zu erreichen, haben wir uns dafür entschieden, unnötige Bezeichnungen und
+                                Rahmenlinien wegzulassen und stattdessen auf Farbabstufungen und klare Linienführung zu
+                                setzen. Auch haben wir darauf geachtet, dass nur die notwendigen Informationen
+                                dargestellt werden und nicht mehr.
+                            </p>
+
+                            <h3>Menschliche Wahrnehmung</h3>
+                            <p>
+                                Bei der Strukturierung des Layouts haben wir die Usability Heuristiken nach Nielsen zu
+                                Hilfe genommen:
+                            </p>
+                            <ul>
+                                <li><b>Sichtbarkeit des Systemstatus</b><br/>Wenn der Nutzer mit dem Mauszeiger über ein
+                                    Land fährt, werden dem Benutzer Tooltips angezeigt. Aber auch andere Funktionen
+                                    erlauben dem Nutzer ein unmittelbares Feedback zu bekommen. So sieht er sofort,
+                                    welche Länder ausgewählt wurden und auch die Einfärbung der Karte und die Achsen des
+                                    Liniendiagramms ändern sich in Echtzeit.
+                                </li>
+                                <li><b>Übereinstimmung von System und Wirklichkeit</b><br/>Die Karte vermittelt den
+                                    Nutzern eine Art von Sicherheit, da es ihnen das Gefühl gibt eine physische Karte zu
+                                    haben.
+                                </li>
+                                <li><b>Nutzerkontrolle und Freiheit</b><br/>Die Nutzer können ihre Aktionen immer wieder
+                                    rückgängig machen. So ist es möglich die ausgewählten Länder wieder zu entfernen.
+                                </li>
+                                <li><b>Beständigkeit und Standards</b><br/>Bei unsere Webseite verwenden wir Material
+                                    Design.
+                                </li>
+                                <li><b>Fehlervermeidung</b><br/>Die Visualisierung wurde ausgiebig auf Fehler getestet.
+                                    Die Visualisierung weist deshalb keine Fehler mehr auf und verhält sich zudem
+                                    responsive.
+                                </li>
+                                <li><b>Wiedererkennung statt Erinnerung</b><br/>Alle Inputfelder, sowie Achsen sind
+                                    beschriftet. Es werden sogar Info-Icons mit Hilfestellung angeboten.
+                                </li>
+                                <li><b>Flexibilität und Effizienz</b><br/>Die Länder können via dem Selectfeld
+                                    ausgewählt werden oder mittels einem Klick auf das Land, somit kann der Nutzer
+                                    flexibel zwischen den Funktionen wechseln.
+                                </li>
+                                <li><b>Ästhetisches und minimalistisches Design</b><br/>Durch Material Design wird ein
+                                    ästhetisches und minimalistisches Design gewährleistet.
+                                </li>
+                                <li><b>Hilfestellung beim Erkennen, Bewerten und Beheben von Fehlern</b><br/>Die
+                                    Visualisierung ist selbsterklärend und unterstützt den Nutzer notfalls mit
+                                    Hilfestellungen.
+                                </li>
+                                <li><b>Hilfe und Dokumentation</b><br/>Das gesamte Projekt dient als Hilfestellung für
+                                    die Visualisierung.
+                                </li>
+                            </ul>
+                            <p>
+                                Des Weiteren wird das Gesetz der Nähe verwendet, um die rechte und linke Seite zu
+                                trennen. Die Inputfelder sind jeweils oberhalb der Visualisierungen und werden dank des
+                                kleineren Abstandes als zusammengehörend wahrgenommen.
+                            </p>
+                            <h4>Accessibility</h4>
+                            <p>Accessibility (deutsch: Barrierefreiheit) ist nicht selbstverständlich, da Userinterfaces
+                                meist von Leuten entwickelt werden, welche selbst keine Einschränkungen besitzen. Umso
+                                wichtiger ist es zu verstehen, dass dies ein Muss ist, um allen den Zugang zum
+                                Interface zu ermöglichen. Damit dies sichergestellt wird, haben wir das Chrome Addon <a
+                                        href="https://chrome.google.com/webstore/detail/colorblindly/floniaahmccleoclneebhhmnjgdfijgg/related">Colorblindly</a>
+                                verwendet, um unsere Webseite und die Visualisierung zu testen. Deshalb ist unsere
+                                Webseite in Blau gehalten. Auch die Karte verwendet verschiedene Blautöne für die
+                                Anzeige.
+                            </p>
+
+                            <h3>Aufgaben der Datenvisualisierung</h3>
+                            <p>
+                                Jeffrey Heer und Ben Shneiderman definieren drei übergeordnete Kategorien von
+                                Aufgabentypen für eine interaktive Dynamik, die zu erfolgreichen analytischen Dialogen
+                                beiträgt.
+                            </p>
+                            <ul>
+                                <li><b>Spezifikation von Daten und Ansichten</b><br/>Dies umfasste das Bereinigen der
+                                    Quelldaten und die Einschränkung auf die Jahre 2012 bis 2020. Des Weiteren führen
+                                    die Daten zur Anzeige von Karte und Liniendiagramm.
+                                </li>
+                                <li><b>Ansichtsmanipulation</b><br/>Über mehrere Inputfelder können die Daten gefiltert
+                                    werden. So kann die Masseinheit, die Verpackungswirtschaft, die Jahre über einen
+                                    Slider und die Länder in einem Selectfeld verändert werden.
+                                </li>
+                                <li><b>Analyseprozess und Provenienz</b><br/>Unsere Daten kommen von einer zuverlässigen
+                                    Quelle. Durch das Anwenden der Usability Heuristiken wird eine intuitive Bedienung
+                                    gewährleistet.
+                                </li>
+                            </ul>
+
+                            <h3>Interaktionskonzept</h3>
+                            <p>
+                                Für unser Interaktionskonzept haben wir das <a
+                                    href="https://jtr13.github.io/cc21/ben-shneidermans-visualization-mantra.html">Visual
+                                Information-Seeking Mantra</a> von Shneiderman zur Hilfe genommen.
+                            </p>
+                            <ul>
+                                <li><b>Overview</b><br/>Beim Start der Webseite landet der Nutzer direkt auf der
+                                    Visualisierung. Hier sieht er bereits die europäische Karte, die vorgefiltert auf
+                                    "Kilogram pro Kopf", "Waste generated" und die Jahre 2012 bis 2020 ist.
+                                </li>
+                                <li><b>Zoom and Filter</b><br/>Die Filter können vom Nutzer frei eingestellt werden. Auf
+                                    eine Zoomfunktion auf der Karte wurde verzichtet, da die Karte nur Europa zeigt.
+                                </li>
+                                <li><b>Details On Demand</b><br/>Möchte der Nutzer weitere Details anschauen, kann er
+                                    jederzeit über ein Land hovern und die Informationen dazu lesen.
+                                </li>
+                            </ul>
+                        </v-card>
+                    </v-tab-item>
+
+                    <v-tab-item :key="visualizationTab" :id="visualizationTab">
+                        <v-card flat class="pa-5">
+                            <h2>Visualisierung</h2>
+
+                            <v-container fluid class="py-0">
+                                <v-row no-gutters>
+                                    <v-col cols="12" sm="3" class="pr-2">
+                                        <v-select
+                                                :items="units"
+                                                label="Unit"
+                                                v-model="unitSelected"
+                                                @change="onUnitChange">
+                                        </v-select>
+                                    </v-col>
+                                    <v-col cols="12" sm="3" class="pl-2">
+                                        <v-radio-group
+                                                v-model="attributeSelected"
+                                                @change="onAttributeChange"
+                                                column>
+                                            <v-radio
+                                                    value="Difference">
+                                                <template v-slot:label>
+                                                        <span>Difference
+                                                            <v-tooltip bottom>
+                                                                <template v-slot:activator="{ on, attrs }">
+                                                                    <v-icon
+                                                                            color="primary"
+                                                                            dark
+                                                                            v-bind="attrs"
+                                                                            v-on="on"
+                                                                    >mdi-information-outline</v-icon>
+                                                                </template>
+                                                                <span>Difference between waste generated and recovery</span>
+                                                            </v-tooltip>
+                                                        </span>
+                                                </template>
+                                            </v-radio>
+                                            <v-radio
+                                                    value="Waste generated">
+                                                <template v-slot:label>
+                                                        <span>Waste generated
+                                                            <v-tooltip bottom>
+                                                                <template v-slot:activator="{ on, attrs }">
+                                                                    <v-icon
+                                                                            color="primary"
+                                                                            dark
+                                                                            v-bind="attrs"
+                                                                            v-on="on"
+                                                                    >mdi-information-outline</v-icon>
+                                                                </template>
+                                                                <span>All packaging waste generated within a country</span>
+                                                            </v-tooltip>
+                                                        </span>
+                                                </template>
+                                            </v-radio>
+                                            <v-radio
+                                                    value="Recovery">
+                                                <template v-slot:label>
+                                                        <span>Recovery
+                                                            <v-tooltip bottom>
+                                                                <template v-slot:activator="{ on, attrs }">
+                                                                    <v-icon
+                                                                            color="primary"
+                                                                            dark
+                                                                            v-bind="attrs"
+                                                                            v-on="on"
+                                                                    >mdi-information-outline</v-icon>
+                                                                </template>
+                                                                <span>Sum of recycling and energy recovery from packaging waste</span>
+                                                            </v-tooltip>
+                                                        </span>
+                                                </template>
+                                            </v-radio>
+                                        </v-radio-group>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+
+                            <v-container fluid class="py-0">
+                                <v-row no-gutters>
+                                    <v-col cols="12" sm="6" class="pr-2">
+                                        <div id="slider-range"></div>
+                                    </v-col>
+
+                                    <v-col cols="12" sm="6" class="pl-2">
+                                        <v-autocomplete
+                                                style="padding: 0"
+                                                v-model="countriesSelected"
+                                                :items="countries"
+                                                label="Countries"
+                                                multiple
+                                                chips
+                                                clearable
+                                                deletable-chips
+                                                @change="onCountryChange"
+                                        ></v-autocomplete>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+
+                            <v-container fluid class="py-0">
+                                <v-row no-gutters>
+                                    <v-col cols="12" sm="6" class="pr-2">
+                                        <svg id='mapChart'></svg>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" class="pl-2">
+                                        <svg id='linechart'></svg>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card>
+                    </v-tab-item>
+
+                    <v-tab-item :key="referencesTab" :id="referencesTab">
+                        <v-card flat class="pa-5">
+                            <h2>Referenzen</h2>
+                            <div class="list-style-type:none">
+                                <ul>
+                                    <li>
+                                        Choropleth map with hover effect in d3.js:
+                                        <a target="_blank"
+                                           href="https://d3-graph-gallery.com/graph/choropleth_hover_effect.html">
+                                            https://d3-graph-gallery.com/graph/choropleth_hover_effect.html</a>
+                                    </li>
+                                    <li>
+                                        Gradient Legend:
+                                        <a target="_blank"
+                                           href="https://bl.ocks.org/HarryStevens/6eb89487fc99ad016723b901cbd57fde">
+                                            https://bl.ocks.org/HarryStevens/6eb89487fc99ad016723b901cbd57fde</a>
+                                    </li>
+                                    <li>
+                                        Most basic line chart in d3.js:
+                                        <a target="_blank" href="https://d3-graph-gallery.com/graph/line_basic.html">
+                                            https://d3-graph-gallery.com/graph/line_basic.html</a>
+                                    </li>
+                                    <li>
+                                        Building legends in d3.js:
+                                        <a target="_blank" href="https://d3-graph-gallery.com/graph/custom_legend.html">
+                                            https://d3-graph-gallery.com/graph/custom_legend.html</a>
+                                    </li>
+                                    <li>
+                                        d3-simple-slider:
+                                        <a target="_blank" href="https://github.com/johnwalley/d3-simple-slider">
+                                            https://github.com/johnwalley/d3-simple-slider</a>
+                                    </li>
+                                    <li>
+                                        d3-tip:
+                                        <a target="_blank" href="https://github.com/caged/d3-tip">
+                                            https://github.com/caged/d3-tip</a>
+                                    </li>
+                                    <li>
+                                        Vuetify:
+                                        <a target="_blank" href="https://vuetifyjs.com/en/">
+                                            https://vuetifyjs.com/en/</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </v-card>
+                    </v-tab-item>
+
+                    <v-tab-item :key="aboutUsTab" :id="aboutUsTab">
+                        <v-card flat class="pa-5">
+                            <h2>Über uns</h2>
+                            <v-container class="pa-0">
+                                <v-row no-gutters>
+                                    <v-col cols="12" sm="6" class="pr-2">
+
+
+                                        <v-card
+                                                max-width="434"
+                                                tile
+                                        >
+                                            <v-img
+                                                    height="100%"
+                                                    src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg"
+                                            >
+                                                <v-row
+                                                        align="end"
+                                                        class="fill-height"
+                                                >
+                                                    <v-col
+                                                            align-self="start"
+                                                            class="pa-0"
+                                                            cols="12"
+                                                    >
+                                                        <v-avatar
+                                                                class="profile"
+                                                                color="grey"
+                                                                size="164"
+                                                                tile
+                                                        >
+                                                            <v-img src="img/usr_4216185.jpg"></v-img>
+                                                        </v-avatar>
+                                                    </v-col>
+                                                    <v-col class="py-0">
+                                                        <v-list-item
+                                                                color="rgba(0, 0, 0, .4)"
+                                                                dark
+                                                        >
+                                                            <v-list-item-content>
+                                                                <v-list-item-title class="text-h6">
+                                                                    Kilian Iten
+                                                                </v-list-item-title>
+                                                                <v-list-item-subtitle>
+                                                                    <p>BSc in Informatik</p>
+                                                                    <p><a style="color: white" href="mailto:kilian.iten@stud.hslu.ch">kilian.iten@stud.hslu.ch</a></p>
+                                                                </v-list-item-subtitle>
+                                                            </v-list-item-content>
+                                                        </v-list-item>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-img>
+                                        </v-card>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" class="pl-2">
+                                        <v-card
+                                                max-width="434"
+                                                tile
+                                        >
+                                            <v-img
+                                                    height="100%"
+                                                    src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg"
+                                            >
+                                                <v-row
+                                                        align="end"
+                                                        class="fill-height"
+                                                >
+                                                    <v-col
+                                                            align-self="start"
+                                                            class="pa-0"
+                                                            cols="12"
+                                                    >
+                                                        <v-avatar
+                                                                class="profile"
+                                                                color="grey"
+                                                                size="164"
+                                                                tile
+                                                        >
+                                                            <v-img src="img/usr_5421083.jpg"></v-img>
+                                                        </v-avatar>
+                                                    </v-col>
+                                                    <v-col class="py-0">
+                                                        <v-list-item
+                                                                color="rgba(0, 0, 0, .4)"
+                                                                dark
+                                                        >
+                                                            <v-list-item-content>
+                                                                <v-list-item-title class="text-h6">
+                                                                    Jovan Pajic
+                                                                </v-list-item-title>
+                                                                <v-list-item-subtitle>
+                                                                    <p>BSc in Wirtschaftsinformatik</p>
+                                                                    <p><a style="color: white" href="mailto:jovan.pajic@stud.hslu.ch">jovan.pajic@stud.hslu.ch</a></p>
+                                                                </v-list-item-subtitle>
+                                                            </v-list-item-content>
+                                                        </v-list-item>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-img>
+                                        </v-card>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card>
+                    </v-tab-item>
+                </v-tabs-items>
+            </v-card>
+        </v-container>
+    </v-app>
+</v-container>
+
+<script>
+
+    new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data: () => ({
+            activeTabIdentifier: null,
+            visualizationTab: 'visualizationTab',
+            problemTab: 'problemTab',
+            dataTab: 'dataTab',
+            conceptualFoundationsTab: 'conceptualFoundationsTab',
+            referencesTab: 'referencesTab',
+            aboutUsTab: 'aboutUsTab',
+            units: ['Kilograms per capita', 'Tonne'],
+            unitSelected: 'Kilograms per capita',
+            attributeSelected: 'Waste generated',
+            countriesSelected: [],
+            countries: [
+                "Austria",
+                "Belgium",
+                "Bulgaria",
+                "Czech Republic",
+                "Denmark",
+                "Estonia",
+                "France",
+                "Germany",
+                "Ireland",
+                "Greece",
+                "Spain",
+                "Croatia",
+                "Italy",
+                "Cyprus",
+                "Latvia",
+                "Lithuania",
+                "Luxembourg",
+                "Hungary",
+                "Malta",
+                "Netherlands",
+                "Poland",
+                "Portugal",
+                "Romania",
+                "Slovenia",
+                "Slovakia",
+                "Finland",
+                "Sweden",
+                "Iceland",
+                "Liechtenstein",
+                "Norway",
+                "England"
+            ]
+        }),
+        mounted,
+        methods: {
+            onUnitChange() {
+                selectedUnit = this.unitSelected;
+                drawMap();
+                drawLine();
+            },
+            onAttributeChange() {
+                selectedAttribute = this.attributeSelected;
+                drawMap();
+                drawLine();
+            },
+            onCountryChange() {
+                selectedCountries = this.countriesSelected;
+                drawLine();
+            }
+        },
+    })
+
+    function mounted() {
+        this.activeTabIdentifier = this.visualizationTab;
+
+        this.countries.sort();
+
+        //set initial unit to display
+        selectedUnit = this.unitSelected;
+
+        //set initial attribute to display
+        selectedAttribute = this.attributeSelected;
+
+        //set initial selected countries
+        selectedCountries = this.countriesSelected;
+
+        //set initial date range
+        selectedYearRange = [2012, 2020];
+    }
+</script>
+</body>
+</html>
